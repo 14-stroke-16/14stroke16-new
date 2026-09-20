@@ -1,4 +1,5 @@
 import * as contentful from "@/utils/contentful";
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
@@ -45,6 +46,20 @@ export async function getStaticProps(context) {
 }
 
 export default function Slug({ article, preview }) {
+  // Send Contentful content metadata (author, etc.) to GA4 as an
+  // "article_view" event so article performance can be sliced by author.
+  useEffect(() => {
+    if (!article?.fields || typeof window === "undefined" || !window.gtag) return;
+    const { title, author, slug, articlePublishedDate, readTime } = article.fields;
+    window.gtag("event", "article_view", {
+      article_author: author || "Unknown",
+      article_title: title,
+      article_slug: slug,
+      article_published_date: articlePublishedDate || null,
+      article_read_time: readTime ?? null,
+    });
+  }, [article]);
+
   if (!article) return <Skeleton />;
 
   const {

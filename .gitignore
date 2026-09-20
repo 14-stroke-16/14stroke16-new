@@ -29,6 +29,14 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# metabase / analytics stack secrets (belt-and-braces; the whole docs/ dir is already ignored above)
+**/.env
+!**/.env.example
+!**/*.env.example
+
+# Claude Code MCP config (holds the Metabase API key)
+.mcp.json
+
 # vercel
 .vercel
 
