@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import Image from "next/image";
 import { getGalleryBySlug, getGallerySlugs } from "@/lib/contentful/gallery";
 import { isImageBlock } from "@/lib/contentful/types";
+import PreviewBanner from "@/components/PreviewBanner";
 
 export const revalidate = 10;
 
@@ -31,13 +33,15 @@ export default async function GalleryItemPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const item = await getGalleryBySlug(slug);
+  const { isEnabled } = await draftMode();
+  const item = await getGalleryBySlug(slug, isEnabled);
   if (!item) notFound();
 
   const { galleryImages, galleryCredits } = item.fields;
 
   return (
     <div className="flex min-h-screen flex-col">
+      {isEnabled && <PreviewBanner />}
       <div className="flex-grow">
         <div className="px-2 py-3">
           <div className="grid grid-cols-2 gap-x-2 md:grid-cols-4 md:px-5">

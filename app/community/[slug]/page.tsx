@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -7,6 +8,7 @@ import {
   getCommunitySlugs,
 } from "@/lib/contentful/community";
 import { isTextBlock, isImageBlock, isQuoteBlock } from "@/lib/contentful/types";
+import PreviewBanner from "@/components/PreviewBanner";
 
 export const revalidate = 10;
 
@@ -54,7 +56,8 @@ export default async function CommunityArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const item = await getCommunityBySlug(slug);
+  const { isEnabled } = await draftMode();
+  const item = await getCommunityBySlug(slug, isEnabled);
   if (!item) notFound();
 
   const {
@@ -70,6 +73,7 @@ export default async function CommunityArticlePage({
 
   return (
     <div>
+      {isEnabled && <PreviewBanner />}
       <div className="mx-auto my-10 px-5 md:max-w-[1200px] md:px-0">
         <div className="grid-layout">
           <h3 className="mb-4 text-left text-4xl font-bold uppercase md:mt-0 xl:hidden xl:text-6xl">

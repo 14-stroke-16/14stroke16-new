@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
@@ -10,6 +11,7 @@ import {
   isQuoteBlock,
 } from "@/lib/contentful/types";
 import ArticleAnalytics from "@/components/ArticleAnalytics";
+import PreviewBanner from "@/components/PreviewBanner";
 
 export const revalidate = 10;
 
@@ -57,7 +59,8 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = await getArticleBySlug(slug);
+  const { isEnabled } = await draftMode();
+  const article = await getArticleBySlug(slug, isEnabled);
   if (!article) notFound();
 
   const {
@@ -75,6 +78,7 @@ export default async function ArticlePage({
 
   return (
     <div>
+      {isEnabled && <PreviewBanner />}
       <ArticleAnalytics
         title={title}
         author={author}

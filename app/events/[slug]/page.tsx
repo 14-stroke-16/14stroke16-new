@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { getEventBySlug, getEventSlugs } from "@/lib/contentful/events";
+import PreviewBanner from "@/components/PreviewBanner";
 
 export const revalidate = 10;
 
@@ -28,7 +30,8 @@ export default async function EventPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const event = await getEventBySlug(slug);
+  const { isEnabled } = await draftMode();
+  const event = await getEventBySlug(slug, isEnabled);
   if (!event) notFound();
 
   const { eventsTitle, eventsThumbnail, eventDate, eventLink, eventDescription } =
@@ -51,6 +54,7 @@ export default async function EventPage({
 
   return (
     <div className="flex min-h-screen flex-col">
+      {isEnabled && <PreviewBanner />}
       <div className="flex-grow">
         <div className="px-3 py-3">
           <div className="grid grid-cols-1 gap-x-4 md:grid-cols-2 md:px-10">
