@@ -7,7 +7,7 @@ export default function PreviewBanner() {
       <Link
         prefetch={false}
         href="/api/draft/disable"
-        className="bg-ivoryWhite ml-5 rounded-lg px-2 py-2 text-xs font-bold text-black"
+        className="ml-5 rounded-lg bg-ivoryWhite px-2 py-2 text-xs font-bold text-black"
       >
         EXIT PREVIEW MODE
       </Link>

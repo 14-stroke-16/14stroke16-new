@@ -34,8 +34,13 @@ export default async function EventPage({
   const event = await getEventBySlug(slug, isEnabled);
   if (!event) notFound();
 
-  const { eventsTitle, eventsThumbnail, eventDate, eventLink, eventDescription } =
-    event.fields;
+  const {
+    eventsTitle,
+    eventsThumbnail,
+    eventDate,
+    eventLink,
+    eventDescription,
+  } = event.fields;
 
   const title = (
     <h3 className="md:text-md mb-4 mt-4 text-lg font-bold uppercase">

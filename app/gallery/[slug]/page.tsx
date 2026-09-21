@@ -49,7 +49,8 @@ export default async function GalleryItemPage({
               if (!isImageBlock(section) || !section.fields.image.fields.file) {
                 return null;
               }
-              const dimensions = section.fields.image.fields.file.details?.image;
+              const dimensions =
+                section.fields.image.fields.file.details?.image;
               return (
                 <div key={index} className="py-1">
                   <Image

@@ -19,7 +19,7 @@ export default function Header() {
   const close = () => setOpen(false);
 
   return (
-    <header className="bg-ivoryWhite sticky top-0 z-50 flex items-center justify-between">
+    <header className="sticky top-0 z-50 flex items-center justify-between bg-ivoryWhite">
       <Link href="/" onClick={close} className="px-4 py-4 md:px-6">
         <Image
           src="/logo_svg.svg"
@@ -52,7 +52,7 @@ export default function Header() {
       )}
 
       <nav
-        className={`bg-ivoryWhite fixed top-0 right-0 z-50 h-full w-64 transform p-8 shadow-lg transition-transform duration-300 ${
+        className={`fixed right-0 top-0 z-50 h-full w-64 transform bg-ivoryWhite p-8 shadow-lg transition-transform duration-300 ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >

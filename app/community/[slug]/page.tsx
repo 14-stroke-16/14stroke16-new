@@ -7,7 +7,11 @@ import {
   getCommunityBySlug,
   getCommunitySlugs,
 } from "@/lib/contentful/community";
-import { isTextBlock, isImageBlock, isQuoteBlock } from "@/lib/contentful/types";
+import {
+  isTextBlock,
+  isImageBlock,
+  isQuoteBlock,
+} from "@/lib/contentful/types";
 import PreviewBanner from "@/components/PreviewBanner";
 
 export const revalidate = 10;
@@ -80,7 +84,10 @@ export default async function CommunityArticlePage({
             {communityTitle}
           </h3>
           <div className="flex justify-between align-bottom xl:hidden">
-            <AuthorTag author={communityAuthor} plugSocket={communityPlugSocket} />
+            <AuthorTag
+              author={communityAuthor}
+              plugSocket={communityPlugSocket}
+            />
             {communityReadTime != null && (
               <p className="text-xs text-black">{communityReadTime} mins</p>
             )}

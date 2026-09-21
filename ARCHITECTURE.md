@@ -34,15 +34,15 @@ lib/
     types.ts              typed content models (Article, Event, Community, GalleryImage, Section union)
     articles.ts           getArticles / getArticleBySlug / getArticleSlugs
     events.ts community.ts gallery.ts
-  analytics.ts            typed GA4 event helpers
 components/
-  layout/                 Header, Footer, MobileNav
+  layout/                 Header (custom slide-in mobile nav), Footer
   cards/                  ArticleCard, EventsCard, CommunityCard, GalleryCard
-  ui/                     shared primitives
+  HomepageArticle.tsx     home page featured-image card
+  ArticleAnalytics.tsx    article_view GA4 event (client component)
+  PreviewBanner.tsx       draft-mode banner
   WebVitals.tsx           useReportWebVitals -> GA4
 styles/
   globals.css
-_legacy/                  OLD Pages-Router code, kept for porting reference (NOT built)
 ```
 
 ## Data fetching
@@ -54,12 +54,12 @@ _legacy/                  OLD Pages-Router code, kept for porting reference (NOT
 
 ## Content model → routes
 
-| Contentful content type | Route         |
-| ----------------------- | ------------- |
-| `article`               | `/articles`   |
-| `community`             | `/community`  |
-| `events`                | `/events`     |
-| `galleryImage`          | `/gallery`    |
+| Contentful content type | Route        |
+| ----------------------- | ------------ |
+| `article`               | `/articles`  |
+| `community`             | `/community` |
+| `events`                | `/events`    |
+| `galleryImage`          | `/gallery`   |
 
 `article.blogSections` is a polymorphic array modelled as a discriminated union:
 `TextBlock | ImageBlock | QuoteBlock`.
@@ -95,15 +95,16 @@ _legacy/                  OLD Pages-Router code, kept for porting reference (NOT
   code-level check in middleware (free), not Clerk's paid production allowlist.
 - Gating driven by a build-time flag so production ships without Clerk.
 
-## Migration order
+## Migration status
 
-1. Scaffold: Next 15 / React 19 / TS, tooling, `app/` shell, root layout. ← current
-2. `lib/contentful/` typed data layer.
-3. Articles (index + `[slug]`) as the reference pattern; verify on the dev preview.
-4. Remaining collections: events, community, gallery.
-5. Static pages: home, contact, get-involved, not-found.
-6. Preview (`draftMode`), metadata, analytics verification.
-7. Delete `_legacy/`, final cleanup.
-8. CSS rebrand layered onto the new markup.
-9. Clerk staging auth.
-```
+Migration to the new stack is **complete** (steps 1–7). Remaining work:
+
+1. ✅ Scaffold: Next 15 / React 19 / TS, tooling, `app/` shell, root layout.
+2. ✅ `lib/contentful/` typed data layer.
+3. ✅ Articles (index + `[slug]`) reference pattern.
+4. ✅ Remaining collections: events, community, gallery.
+5. ✅ Static pages: home, contact, get-involved, not-found.
+6. ✅ Preview (`draftMode`), metadata, analytics.
+7. ✅ Delete legacy code, final cleanup.
+8. ⏳ CSS rebrand layered onto the new markup.
+9. ⏳ Clerk staging auth.
