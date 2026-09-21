@@ -10,6 +10,16 @@ import WebVitals from "@/components/WebVitals";
 
 const GA_MEASUREMENT_ID = "G-6G2T8LT049";
 
+// Auth (Clerk) wraps the app ONLY on staging/preview. NEXT_PUBLIC_ENABLE_AUTH
+// is set in Vercel's Preview scope only; it's inlined at build time, so in the
+// production build the `if` is provably false and webpack drops this require —
+// @clerk/nextjs never enters the production bundle.
+type Wrapper = (props: { children: React.ReactNode }) => React.ReactNode;
+let AuthProvider: Wrapper = ({ children }) => children;
+if (process.env.NEXT_PUBLIC_ENABLE_AUTH === "true") {
+  AuthProvider = require("@/components/AuthProvider").default as Wrapper;
+}
+
 const einaFont = localFont({
   src: [
     { path: "../public/fonts/Eina01-Bold.ttf", weight: "700" },
@@ -57,9 +67,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${einaFont.variable} bg-ivoryWhite font-sans`}>
-        <Header />
-        {children}
-        <Footer />
+        <AuthProvider>
+          <Header />
+          {children}
+          <Footer />
+        </AuthProvider>
 
         {/* Google Analytics (GA4) */}
         <Script
