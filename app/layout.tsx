@@ -8,7 +8,12 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WebVitals from "@/components/WebVitals";
 
-const GA_MEASUREMENT_ID = "G-6G2T8LT049";
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID;
+// Only load GA when an ID is configured AND this is a production build.
+// This keeps localhost dev out of analytics; staging is separated by giving
+// the staging deployment a different (or empty) NEXT_PUBLIC_GA_ID.
+const gaEnabled =
+  process.env.NODE_ENV === "production" && Boolean(GA_MEASUREMENT_ID);
 
 const einaFont = localFont({
   src: [
@@ -61,21 +66,25 @@ export default function RootLayout({
         {children}
         <Footer />
 
-        {/* Google Analytics (GA4) */}
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_MEASUREMENT_ID}');
-          `}
-        </Script>
+        {/* Google Analytics (GA4) — production only, gated by NEXT_PUBLIC_GA_ID */}
+        {gaEnabled && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_MEASUREMENT_ID}');
+              `}
+            </Script>
+            <WebVitals />
+          </>
+        )}
 
-        <WebVitals />
         <Analytics />
         <SpeedInsights />
       </body>
