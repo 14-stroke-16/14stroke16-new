@@ -128,7 +128,7 @@ export interface HomepageFields {
   editorialCtaLabel?: string;
   editorialCtaLink?: string;
   fitPics?: FitPic[];
-  // teamMembers reference list is added when THE TEAM section is built.
+  teamMembers?: TeamMember[];
 }
 export type Homepage = Entry<HomepageFields>;
 

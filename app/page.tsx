@@ -5,6 +5,7 @@ import Marquee from "@/components/Marquee";
 import FeaturedArticleBlock from "@/components/FeaturedArticleBlock";
 import EditorialBanner from "@/components/EditorialBanner";
 import FitpicCarousel from "@/components/FitpicCarousel";
+import TeamSection from "@/components/TeamSection";
 
 export const revalidate = 10;
 
@@ -80,7 +81,11 @@ export default async function Home() {
         <FitpicCarousel items={hp.fitPics} />
       )}
 
-      {/* THE TEAM section + real footer to follow. */}
+      {hp?.teamMembers && hp.teamMembers.length > 0 && (
+        <TeamSection members={hp.teamMembers} />
+      )}
+
+      {/* Real footer to follow. */}
     </>
   );
 }
