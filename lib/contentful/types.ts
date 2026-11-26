@@ -104,3 +104,48 @@ export interface GalleryFields {
   googleDriveLink?: string;
 }
 export type GalleryItem = Entry<GalleryFields>;
+
+/* ---- homepage (singleton, content type: "homepage") ---- */
+
+export interface HomepageFields {
+  internalTitle: string;
+  bannerEnabled?: boolean;
+  bannerCustomMessage?: string;
+  /** The month/season's lead article — drives the hero's READ MORE link and,
+   *  when heroHeadlineSource is "Article title", the headline. */
+  heroArticle?: Article;
+  heroBackground?: ContentfulAsset;
+  heroHeadline: string;
+  /** "Brand tagline" (default) or "Article title" — toggles the headline source. */
+  heroHeadlineSource?: string;
+  heroIntro?: string;
+  heroCtaLabel?: string;
+  heroCtaLink?: string;
+  featuredArticles?: FeaturedArticle[];
+  // Remaining reference lists (fitPics, teamMembers) + editorial fields are
+  // added to the content type as those sections are built.
+}
+export type Homepage = Entry<HomepageFields>;
+
+/* ---- featured article block (content type: "featuredArticle") ---- */
+
+export interface FeaturedArticleFields {
+  internalTitle: string;
+  article: Article;
+  headingOverride?: string;
+  blurbOverride?: string;
+  imageOverride?: ContentfulAsset;
+  /** "Full bleed" (default) or "Contained" (smaller, padded, light bg). */
+  imageStyle?: string;
+}
+export type FeaturedArticle = Entry<FeaturedArticleFields>;
+
+/* ---- team member (content type: "teamMember") ---- */
+
+export interface TeamMemberFields {
+  name: string;
+  role: string;
+  photo: ContentfulAsset;
+  photoAltTag: string;
+}
+export type TeamMember = Entry<TeamMemberFields>;

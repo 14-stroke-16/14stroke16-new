@@ -17,6 +17,18 @@ module.exports = {
       },
       colors: {
         ivoryWhite: "#FCFEF2",
+        // Provisional brand accent (red panels / active team row). Confirm exact
+        // hex against the final design — see docs/homepage-redesign-plan.md §7.1.
+        brandRed: "#E8172E",
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+      },
+      animation: {
+        marquee: "marquee 30s linear infinite",
       },
     },
   },

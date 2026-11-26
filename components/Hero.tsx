@@ -1,0 +1,62 @@
+import Image from "next/image";
+import Button from "@/components/ui/Button";
+
+interface HeroProps {
+  /** Full-bleed background image. If absent, falls back to a solid dark bg. */
+  image?: { url: string; alt?: string } | null;
+  headline: string;
+  intro?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+// Homepage hero: full-bleed image, large overlaid headline (bottom-left),
+// intro paragraph and an outlined CTA. Text is ivory on the darkened image,
+// so the outline Button inherits a light border via border-current.
+export default function Hero({
+  image,
+  headline,
+  intro,
+  ctaLabel,
+  ctaHref,
+}: HeroProps) {
+  const src = image?.url
+    ? image.url.startsWith("http")
+      ? image.url
+      : `https:${image.url}`
+    : null;
+
+  return (
+    <section className="relative flex min-h-[70vh] w-full items-end overflow-hidden bg-black md:min-h-[85vh]">
+      {src && (
+        <Image
+          src={src}
+          alt={image?.alt ?? ""}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+      )}
+      <div className="absolute inset-0 bg-black/30" aria-hidden="true" />
+
+      <div className="relative z-10 mx-auto w-full max-w-[1200px] px-4 pb-[13vh] pt-24 text-ivoryWhite md:px-8">
+        <h1 className="whitespace-pre-line text-5xl font-bold uppercase leading-[0.75] tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
+          {headline}
+        </h1>
+        {intro && (
+          <p className="mt-4 max-w-md text-xs leading-snug md:text-sm">
+            {intro}
+          </p>
+        )}
+        {ctaLabel && ctaHref && (
+          <div className="mt-6">
+            <Button href={ctaHref} variant="outline">
+              {ctaLabel}
+            </Button>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
