@@ -3,6 +3,7 @@ import { getHomepage } from "@/lib/contentful/homepage";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import FeaturedArticleBlock from "@/components/FeaturedArticleBlock";
+import EditorialBanner from "@/components/EditorialBanner";
 
 export const revalidate = 10;
 
@@ -57,7 +58,24 @@ export default async function Home() {
         <FeaturedArticleBlock key={item.sys.id} item={item} index={i} />
       ))}
 
-      {/* Editorial / FITPIC / Team sections to follow. */}
+      {hp?.editorialText && (
+        <EditorialBanner
+          image={
+            hp.editorialImage
+              ? {
+                  url: hp.editorialImage.fields.file.url,
+                  alt: hp.editorialImage.fields.description,
+                }
+              : null
+          }
+          label={hp.editorialLabel}
+          text={hp.editorialText}
+          ctaLabel={hp.editorialCtaLabel}
+          ctaHref={hp.editorialCtaLink}
+        />
+      )}
+
+      {/* FITPIC / Team sections to follow. */}
     </>
   );
 }

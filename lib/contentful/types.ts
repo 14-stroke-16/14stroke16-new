@@ -122,8 +122,13 @@ export interface HomepageFields {
   heroCtaLabel?: string;
   heroCtaLink?: string;
   featuredArticles?: FeaturedArticle[];
-  // Remaining reference lists (fitPics, teamMembers) + editorial fields are
-  // added to the content type as those sections are built.
+  editorialImage?: ContentfulAsset;
+  editorialLabel?: string;
+  editorialText?: string;
+  editorialCtaLabel?: string;
+  editorialCtaLink?: string;
+  // Remaining reference lists (fitPics, teamMembers) are added as those
+  // sections are built.
 }
 export type Homepage = Entry<HomepageFields>;
 
