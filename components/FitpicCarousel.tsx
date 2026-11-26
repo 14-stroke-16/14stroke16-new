@@ -74,7 +74,7 @@ export default function FitpicCarousel({ items }: { items: FitPic[] }) {
   const list = items.slice(0, 6);
 
   return (
-    <section className="border-t-4 border-ivoryWhite bg-black py-16 text-ivoryWhite md:py-24">
+    <section className="border-t-[3px] border-ivoryWhite bg-black py-16 text-ivoryWhite md:py-24">
       <div className="mx-auto max-w-[1200px] px-4 md:px-8">
         <SectionLabel className="text-2xl md:text-3xl">FITPIC.</SectionLabel>
 
