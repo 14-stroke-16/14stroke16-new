@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import FeaturedArticleBlock from "@/components/FeaturedArticleBlock";
 import EditorialBanner from "@/components/EditorialBanner";
+import FitpicCarousel from "@/components/FitpicCarousel";
 
 export const revalidate = 10;
 
@@ -75,7 +76,11 @@ export default async function Home() {
         />
       )}
 
-      {/* FITPIC / Team sections to follow. */}
+      {hp?.fitPics && hp.fitPics.length > 0 && (
+        <FitpicCarousel items={hp.fitPics} />
+      )}
+
+      {/* THE TEAM section + real footer to follow. */}
     </>
   );
 }

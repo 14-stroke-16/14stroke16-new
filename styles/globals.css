@@ -17,3 +17,11 @@ p {
 .align-bottom {
   align-items: flex-end;
 }
+
+/* Hide the native scrollbar — the FITPIC carousel shows its own progress bar. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

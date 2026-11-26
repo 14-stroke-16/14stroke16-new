@@ -66,7 +66,7 @@ export default function FeaturedArticleBlock({
         {heading}
       </h2>
       {blurb && (
-        <p className="line-clamp-6 max-w-md text-sm leading-relaxed md:text-base">
+        <p className="line-clamp-6 max-w-xl text-sm leading-relaxed md:text-base">
           {blurb}
         </p>
       )}

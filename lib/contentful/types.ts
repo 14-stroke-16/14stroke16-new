@@ -127,10 +127,21 @@ export interface HomepageFields {
   editorialText?: string;
   editorialCtaLabel?: string;
   editorialCtaLink?: string;
-  // Remaining reference lists (fitPics, teamMembers) are added as those
-  // sections are built.
+  fitPics?: FitPic[];
+  // teamMembers reference list is added when THE TEAM section is built.
 }
 export type Homepage = Entry<HomepageFields>;
+
+/* ---- fit pic (content type: "fitPic") ---- */
+
+export interface FitPicFields {
+  title: string;
+  slug: string;
+  image: ContentfulAsset;
+  imageAltTag: string;
+  excerpt: string;
+}
+export type FitPic = Entry<FitPicFields>;
 
 /* ---- featured article block (content type: "featuredArticle") ---- */
 
