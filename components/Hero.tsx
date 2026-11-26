@@ -41,7 +41,7 @@ export default function Hero({
       <div className="absolute inset-0 bg-black/30" aria-hidden="true" />
 
       <div className="relative z-10 mx-auto w-full max-w-[1200px] px-4 pb-[13vh] pt-24 text-ivoryWhite md:px-8">
-        <h1 className="whitespace-pre-line text-5xl font-bold uppercase leading-[0.75] tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
+        <h1 className="whitespace-pre-line text-5xl font-bold uppercase leading-[0.9] tracking-tight sm:text-6xl md:text-7xl md:leading-[0.7] lg:text-8xl">
           {headline}
         </h1>
         {intro && (
