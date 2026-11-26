@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import { getArticles } from "@/lib/contentful/articles";
 import { getHomepage } from "@/lib/contentful/homepage";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import FeaturedArticleBlock from "@/components/FeaturedArticleBlock";
-import HomepageArticle from "@/components/HomepageArticle";
 
 export const revalidate = 10;
 
@@ -14,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const [homepage, articles] = await Promise.all([getHomepage(), getArticles()]);
+  const homepage = await getHomepage();
 
   const hp = homepage?.fields;
   const heroArticle = hp?.heroArticle;
@@ -59,17 +57,7 @@ export default async function Home() {
         <FeaturedArticleBlock key={item.sys.id} item={item} index={i} />
       ))}
 
-      {/* TODO: replace with the designed Editorial / FITPIC / Team sections.
-          Temporary article grid kept below during the rebuild. */}
-      <div className="mx-auto my-10 px-1 md:max-w-[1200px] md:px-0">
-        <div className="columns-1 gap-4 md:columns-2 lg:columns-3">
-          {articles.slice(0, 9).map((article) => (
-            <div key={article.sys.id} className="mb-4 break-inside-avoid">
-              <HomepageArticle article={article} />
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Editorial / FITPIC / Team sections to follow. */}
     </>
   );
 }
