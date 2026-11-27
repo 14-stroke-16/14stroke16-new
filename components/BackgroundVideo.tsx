@@ -1,11 +1,22 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback } from "react";
 
 // Autoplaying, muted, looping background video (hero/featured/editorial).
-// React doesn't emit the `muted` attribute in the server-rendered HTML, so
-// mobile browsers block autoplay on first paint. We force muted and call play()
-// from the client on mount — muted playback is allowed without a user gesture.
+//
+// iOS Safari only autoplays a video when it is muted AND the `muted` attribute
+// is present on the element — but React does NOT emit `muted` into the markup
+// (it manages it as a property), so on a real iPhone the video stays paused and
+// shows a play button. The callback ref below sets `defaultMuted` (which makes
+// the `muted` content attribute reflect) as early as possible and nudges
+// play(), matching the plain `autoplay loop muted playsinline` setup that sites
+// like 032c use. A single element is deliberate: iOS is unreliable about
+// autoplaying more than one video at once.
+//
+// NOTE: a truly seamless loop also depends on the clip itself — the source
+// should be encoded so its first and last frames match (a "loop-ready" export).
+// If autoplay still doesn't start on a device, check iOS Low Power Mode, which
+// blocks muted autoplay entirely; the poster image shows in that case.
 export default function BackgroundVideo({
   src,
   type,
@@ -17,14 +28,11 @@ export default function BackgroundVideo({
   poster?: string;
   className?: string;
 }) {
-  const ref = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = ref.current;
-    if (!video) return;
-    video.muted = true;
-    video.setAttribute("muted", "");
-    const played = video.play();
+  const setup = useCallback((v: HTMLVideoElement | null) => {
+    if (!v) return;
+    v.defaultMuted = true;
+    v.muted = true;
+    const played = v.play();
     if (played && typeof played.catch === "function") {
       played.catch(() => {
         /* autoplay may be blocked (e.g. iOS Low Power Mode); poster shows. */
@@ -34,13 +42,13 @@ export default function BackgroundVideo({
 
   return (
     <video
-      ref={ref}
+      ref={setup}
       className={`absolute inset-0 h-full w-full object-cover ${className}`}
       autoPlay
-      muted
       loop
+      muted
       playsInline
-      preload="metadata"
+      preload="auto"
       poster={poster}
     >
       <source src={src} type={type} />
