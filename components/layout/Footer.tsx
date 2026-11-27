@@ -57,9 +57,12 @@ export default function Footer({ chrome }: { chrome?: SiteChrome | null }) {
         </div>
       </div>
 
-      {/* Oversized wordmark — last thing on the page, one line, full-bleed. */}
+      {/* Oversized wordmark — last thing on the page, one line. On phones it is
+          pulled in a little (14.5vw) so a side gutter remains and rounded screen
+          corners clip the footer background, not the text; full-bleed (16.2vw)
+          from sm up. */}
       <div className="overflow-x-hidden">
-        <p className="-mb-[2.5vw] whitespace-nowrap text-center text-[16.2vw] font-bold uppercase leading-none tracking-tight">
+        <p className="-mb-[2.5vw] whitespace-nowrap text-center text-[14.5vw] font-bold uppercase leading-none tracking-tight sm:text-[16.2vw]">
           14STROKE16
         </p>
       </div>
