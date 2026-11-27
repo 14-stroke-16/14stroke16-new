@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Button from "@/components/ui/Button";
 import SectionLabel from "@/components/ui/SectionLabel";
+import Media from "@/components/Media";
 
 interface EditorialBannerProps {
-  image?: { url: string; alt?: string } | null;
+  image?: { url: string; alt?: string; type?: string } | null;
   label?: string;
   text: string;
   ctaLabel?: string;
@@ -27,15 +27,13 @@ export default function EditorialBanner({
 
   return (
     <section className="relative flex min-h-[80vh] w-full items-center overflow-hidden bg-black">
-      {src && (
-        <Image
-          src={src}
-          alt={image?.alt ?? ""}
-          fill
-          sizes="100vw"
-          className="object-cover"
-        />
-      )}
+      <Media
+        src={src}
+        type={image?.type}
+        alt={image?.alt ?? ""}
+        fill
+        sizes="100vw"
+      />
       <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
 
       <div className="relative z-10 mx-auto w-full max-w-[1200px] px-4 py-16 text-ivoryWhite md:px-8">

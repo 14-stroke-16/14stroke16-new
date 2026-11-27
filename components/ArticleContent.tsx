@@ -5,8 +5,11 @@ import {
   isTextBlock,
   isImageBlock,
   isQuoteBlock,
+  isVideoBlock,
   type Article,
 } from "@/lib/contentful/types";
+import Media from "@/components/Media";
+import VideoEmbed from "@/components/VideoEmbed";
 
 function AuthorTag({
   author,
@@ -56,8 +59,9 @@ export default function ArticleContent({ article }: { article: Article }) {
           )}
         </div>
         {featuredImage && (
-          <Image
+          <Media
             src={`https:${featuredImage.fields.file.url}`}
+            type={featuredImage.fields.file.contentType}
             width={600}
             height={600}
             alt={featuredImageAltTag ?? title}
@@ -112,6 +116,25 @@ export default function ArticleContent({ article }: { article: Article }) {
                 className="my-5 px-3 py-5 text-center text-3xl font-bold md:py-5"
               >
                 {section.fields.quoteBlockText}
+              </div>
+            );
+          }
+          if (isVideoBlock(section)) {
+            const { videoUrl, videoFile, caption } = section.fields;
+            return (
+              <div key={index} className="py-5">
+                {videoUrl ? (
+                  <VideoEmbed url={videoUrl} title={caption} />
+                ) : videoFile ? (
+                  <Media
+                    src={`https:${videoFile.fields.file.url}`}
+                    type={videoFile.fields.file.contentType}
+                    className="w-full"
+                  />
+                ) : null}
+                {caption && (
+                  <p className="mt-2 text-center text-sm opacity-60">{caption}</p>
+                )}
               </div>
             );
           }

@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Button from "@/components/ui/Button";
+import Media from "@/components/Media";
 
 interface HeroProps {
-  /** Full-bleed background image. If absent, falls back to a solid dark bg. */
-  image?: { url: string; alt?: string } | null;
+  /** Full-bleed background image or video. If absent, falls back to a solid dark bg. */
+  image?: { url: string; alt?: string; type?: string } | null;
   headline: string;
   intro?: string;
   ctaLabel?: string;
@@ -28,16 +28,14 @@ export default function Hero({
 
   return (
     <section className="relative flex min-h-[70vh] w-full items-end overflow-hidden bg-black md:min-h-[85vh]">
-      {src && (
-        <Image
-          src={src}
-          alt={image?.alt ?? ""}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-      )}
+      <Media
+        src={src}
+        type={image?.type}
+        alt={image?.alt ?? ""}
+        fill
+        priority
+        sizes="100vw"
+      />
       <div className="absolute inset-0 bg-black/30" aria-hidden="true" />
 
       <div className="relative z-10 mx-auto w-full max-w-[1200px] px-4 pb-[13vh] pt-24 text-ivoryWhite md:px-8">

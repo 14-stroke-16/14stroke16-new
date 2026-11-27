@@ -18,6 +18,8 @@ export interface ContentfulAsset {
     description?: string;
     file: {
       url: string;
+      /** MIME type, e.g. "image/jpeg" or "video/mp4" — used to render video. */
+      contentType?: string;
       details?: { image?: { width: number; height: number } };
     };
   };
@@ -40,7 +42,18 @@ export interface QuoteBlock {
   fields: { quoteBlockText: string };
 }
 
-export type ContentSection = TextBlock | ImageBlock | QuoteBlock;
+export interface VideoBlock {
+  sys: { contentType: { sys: { id: "videoBlock" } } };
+  fields: {
+    /** YouTube/Vimeo URL (long-form video). */
+    videoUrl?: string;
+    /** Or an uploaded Contentful video asset. */
+    videoFile?: ContentfulAsset;
+    caption?: string;
+  };
+}
+
+export type ContentSection = TextBlock | ImageBlock | QuoteBlock | VideoBlock;
 
 export const isTextBlock = (s: ContentSection): s is TextBlock =>
   s.sys.contentType.sys.id === "textBlock";
@@ -48,6 +61,8 @@ export const isImageBlock = (s: ContentSection): s is ImageBlock =>
   s.sys.contentType.sys.id === "image";
 export const isQuoteBlock = (s: ContentSection): s is QuoteBlock =>
   s.sys.contentType.sys.id === "quoteBlock";
+export const isVideoBlock = (s: ContentSection): s is VideoBlock =>
+  s.sys.contentType.sys.id === "videoBlock";
 
 /* ---- article ---- */
 

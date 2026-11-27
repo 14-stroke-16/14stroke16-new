@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Button from "@/components/ui/Button";
+import Media from "@/components/Media";
 import type { FeaturedArticle } from "@/lib/contentful/types";
 import { pillarPath } from "@/lib/contentful/pillars";
 
@@ -23,6 +23,7 @@ export default function FeaturedArticleBlock({
   const blurb = item.fields.blurbOverride || art.fields.excerpt;
   const imgAsset = item.fields.imageOverride || art.fields.featuredImage;
   const imgUrl = imgAsset?.fields?.file?.url;
+  const imgType = imgAsset?.fields?.file?.contentType;
   const src = imgUrl
     ? imgUrl.startsWith("http")
       ? imgUrl
@@ -52,15 +53,13 @@ export default function FeaturedArticleBlock({
         slim ? "md:w-2/5" : "md:w-1/2"
       }`}
     >
-      {src && (
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          sizes="(max-width: 768px) 100vw, 45vw"
-          className="object-cover"
-        />
-      )}
+      <Media
+        src={src}
+        type={imgType}
+        alt={alt}
+        fill
+        sizes="(max-width: 768px) 100vw, 45vw"
+      />
     </div>
   );
 

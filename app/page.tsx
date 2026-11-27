@@ -75,6 +75,7 @@ export default async function Home() {
               ? {
                   url: hp.heroBackground.fields.file.url,
                   alt: hp.heroBackground.fields.description,
+                  type: hp.heroBackground.fields.file.contentType,
                 }
               : null
           }
@@ -96,6 +97,7 @@ export default async function Home() {
               ? {
                   url: hp.editorialImage.fields.file.url,
                   alt: hp.editorialImage.fields.description,
+                  type: hp.editorialImage.fields.file.contentType,
                 }
               : null
           }
