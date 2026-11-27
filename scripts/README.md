@@ -15,6 +15,42 @@ This is a one-person job — whoever prepares the assets.
 
 ---
 
+## Filming your own clips so they loop
+
+The cleanest, 032c-style loops come from the footage itself — shoot with the
+loop in mind and the restart is invisible, with no crossfade needed:
+
+- **Lock the camera on a tripod.** Any camera movement means the framing won't
+  line up at the loop point. Static shots loop; moving/handheld shots don't.
+- **Pick continuous, non-directional motion** where no moment is clearly "the
+  start" or "the end": steam, smoke, haze, rippling water, blowing fabric or
+  hair, flickering light, drifting particles, a model holding a pose with small
+  idle movement. Avoid one-time actions (walking in/out, a single gesture) —
+  those can't loop.
+- **Lock exposure and white balance** before recording. If the camera
+  auto-adjusts brightness or colour mid-clip, you'll see a pop at the loop.
+- **Shoot a few seconds longer than you need** so there's room to trim to a
+  clean loop point.
+
+Then encode with `--loop none` (just optimise) and it loops seamlessly:
+
+```bash
+./scripts/encode-video.sh clip.mov out.mp4 --loop none
+```
+
+If a clip is *almost* a loop (small mismatch), a short crossfade hides the
+remainder nearly invisibly — much subtler than the 0.5s default:
+
+```bash
+./scripts/encode-video.sh clip.mov out.mp4 --fade 0.25
+```
+
+Not sure if a clip loops? Ask the developer to measure it — a quick check scores
+how close the end is to the start, so you know whether to use `--loop none` or a
+touch of crossfade.
+
+---
+
 ## One-time setup
 
 Install `ffmpeg`:
