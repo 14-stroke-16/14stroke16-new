@@ -1,5 +1,6 @@
 import Button from "@/components/ui/Button";
 import Media from "@/components/Media";
+import ViewportVar from "@/components/ViewportVar";
 
 interface HeroProps {
   /** Full-bleed background image or video. If absent, falls back to a solid dark bg. */
@@ -27,7 +28,8 @@ export default function Hero({
     : null;
 
   return (
-    <section className="relative flex min-h-[100dvh] w-full items-end overflow-hidden bg-black md:min-h-[calc(100dvh-102px)]">
+    <section className="relative flex min-h-[var(--app-vh,100dvh)] w-full items-end overflow-hidden bg-black md:min-h-[calc(100dvh-102px)]">
+      <ViewportVar />
       <Media
         src={src}
         type={image?.type}
