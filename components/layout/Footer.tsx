@@ -37,8 +37,9 @@ export default function Footer({ chrome }: { chrome?: SiteChrome | null }) {
       className="bg-ivoryWhite text-black"
       style={{ backgroundColor: bg, color: fg }}
     >
-      {/* Links + copyright, one line spanning the full width */}
-      <div className="px-4 pb-10 pt-12 md:px-8">
+      {/* Links + copyright. On phones the side gutter matches the inset wordmark
+          below (~5.25vw) so they line up; full-width padding from sm up. */}
+      <div className="px-[5.25vw] pb-10 pt-12 sm:px-8">
         <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 text-xs font-medium uppercase tracking-wide">
           <nav className="flex flex-wrap gap-x-8 gap-y-2">
             {links.map((l) => (
@@ -58,11 +59,11 @@ export default function Footer({ chrome }: { chrome?: SiteChrome | null }) {
       </div>
 
       {/* Oversized wordmark — last thing on the page, one line. On phones it is
-          pulled in a little (14.5vw) so a side gutter remains and rounded screen
-          corners clip the footer background, not the text; full-bleed (16.2vw)
-          from sm up. */}
-      <div className="overflow-x-hidden pb-[2.5vw]">
-        <p className="whitespace-nowrap text-center text-[14.5vw] font-bold uppercase leading-none tracking-tight sm:text-[16.2vw]">
+          inset on all sides (14.5vw + a matching bottom gutter) so rounded screen
+          corners clip the footer background, not the text. From sm up it is
+          full-bleed (16.2vw) and pulled flush to the bottom, as on desktop. */}
+      <div className="overflow-x-hidden pb-[5.25vw] sm:pb-0">
+        <p className="whitespace-nowrap text-center text-[14.5vw] font-bold uppercase leading-none tracking-tight sm:-mb-[2.5vw] sm:text-[16.2vw]">
           14STROKE16
         </p>
       </div>
