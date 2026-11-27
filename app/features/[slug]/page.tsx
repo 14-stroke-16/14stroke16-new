@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { draftMode } from "next/headers";
-import Image from "next/image";
 import Link from "next/link";
 import { getFeatureBySlug, getFeatureSlugs } from "@/lib/contentful/pillars";
+import ArticleContent from "@/components/ArticleContent";
 import PreviewBanner from "@/components/PreviewBanner";
 
 export const revalidate = 10;
@@ -24,8 +24,8 @@ export async function generateMetadata({
   return { title: item.fields.title, description: item.fields.excerpt };
 }
 
-// Minimal Feature page. Features share the Article shape; the full layout can
-// reuse the article renderer once its design is confirmed.
+// Feature page. Features share the Article shape, so they use the same full
+// article renderer as Covers.
 export default async function FeaturePage({
   params,
 }: {
@@ -36,44 +36,21 @@ export default async function FeaturePage({
   const item = await getFeatureBySlug(slug, isEnabled);
   if (!item) notFound();
 
-  const { title, featuredImage, featuredImageAltTag, excerpt, introductionText } =
-    item.fields;
-  const url = featuredImage?.fields?.file?.url;
-
   return (
     <div>
       {isEnabled && <PreviewBanner />}
-      <main className="mx-auto my-12 max-w-[900px] px-5 md:px-0">
+      <div className="mx-auto max-w-[1200px] px-5 pt-8 md:px-0">
         <Link
           href="/"
           className="text-xs uppercase tracking-wide opacity-60 hover:opacity-100"
         >
           ← Home
         </Link>
-        <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] opacity-60">
+        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.2em] opacity-60">
           Feature
         </p>
-        <h1 className="mt-2 text-3xl font-bold uppercase leading-tight tracking-tight md:text-5xl">
-          {title}
-        </h1>
-        {url && (
-          <div className="relative mt-8 aspect-[3/2] w-full overflow-hidden bg-black/10">
-            <Image
-              src={`https:${url}`}
-              alt={featuredImageAltTag || title}
-              fill
-              sizes="(max-width: 900px) 100vw, 900px"
-              className="object-cover"
-              priority
-            />
-          </div>
-        )}
-        {(introductionText || excerpt) && (
-          <p className="mt-8 whitespace-pre-wrap text-base leading-relaxed xl:text-lg">
-            {introductionText || excerpt}
-          </p>
-        )}
-      </main>
+      </div>
+      <ArticleContent article={item} />
     </div>
   );
 }

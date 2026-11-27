@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import type { FeaturedArticle } from "@/lib/contentful/types";
+import { pillarPath } from "@/lib/contentful/pillars";
 
 // A homepage featured block. Two treatments:
 //  - "Full bleed" (default): image fills its half (object-cover), paired with a
@@ -28,7 +29,8 @@ export default function FeaturedArticleBlock({
       : `https:${imgUrl}`
     : null;
   const alt = art.fields.featuredImageAltTag || heading;
-  const href = `/articles/${art.fields.slug}`;
+  // Pillar-aware link: Covers → /articles, Features → /features, Locked In → /locked-in.
+  const href = `${pillarPath(art.sys?.contentType?.sys?.id)}/${art.fields.slug}`;
 
   // "Contained" = slimmer image column + wider, more-indented text side; the
   // image itself still fills its container full-bleed (object-cover).

@@ -93,10 +93,20 @@ export async function getBannerItems(
     }),
   );
 
-  return perType
-    .flat()
-    .sort((a, b) => b.date - a.date)
-    .slice(0, limit);
+  // Newest first, then keep only the first (newest) item per talent so the
+  // banner shows distinct people rather than repeating the same name (e.g. when
+  // several of the latest Fit Pics are the same talent).
+  const sorted = perType.flat().sort((a, b) => b.date - a.date);
+  const out: BannerItem[] = [];
+  const seen = new Set<string>();
+  for (const item of sorted) {
+    const key = item.talentName.trim().toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+    if (out.length >= limit) break;
+  }
+  return out;
 }
 
 export interface BannerSegment {

@@ -2,7 +2,12 @@ import type { Document } from "@contentful/rich-text-types";
 
 /** Generic Contentful entry wrapper used across content types. */
 export interface Entry<TFields> {
-  sys: { id: string; createdAt: string };
+  sys: {
+    id: string;
+    createdAt: string;
+    /** Present on delivered entries; used to build pillar-aware links. */
+    contentType?: { sys: { id: string } };
+  };
   fields: TFields;
 }
 

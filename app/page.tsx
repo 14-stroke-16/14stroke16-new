@@ -6,6 +6,7 @@ import FeaturedArticleBlock from "@/components/FeaturedArticleBlock";
 import EditorialBanner from "@/components/EditorialBanner";
 import FitpicCarousel from "@/components/FitpicCarousel";
 import { getBannerItems, bannerSegments } from "@/lib/contentful/banner";
+import { pillarPath } from "@/lib/contentful/pillars";
 
 export const revalidate = 10;
 
@@ -24,9 +25,10 @@ export default async function Home() {
     hp?.heroHeadlineSource === "Article title" && heroArticle?.fields?.title
       ? heroArticle.fields.title
       : hp?.heroHeadline;
-  // READ MORE points at the referenced lead article; falls back to the manual link.
+  // READ MORE points at the referenced lead item (Cover / Feature / Locked In);
+  // falls back to the manual link.
   const heroCtaHref = heroArticle?.fields?.slug
-    ? `/articles/${heroArticle.fields.slug}`
+    ? `${pillarPath(heroArticle.sys?.contentType?.sys?.id)}/${heroArticle.fields.slug}`
     : hp?.heroCtaLink;
 
   // Top banner. Priority: a custom message (if set) wins; otherwise show the

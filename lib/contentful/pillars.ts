@@ -17,3 +17,17 @@ export const getLockedInBySlug = (slug: string, preview = false) =>
     { content_type: "lockedIn", "fields.slug": slug },
     preview,
   );
+
+/** Route base for a pillar entry, by its content type id. */
+export function pillarPath(contentTypeId?: string): string {
+  switch (contentTypeId) {
+    case "feature":
+      return "/features";
+    case "lockedIn":
+      return "/locked-in";
+    case "fitPic":
+      return "/fitpics";
+    default:
+      return "/articles";
+  }
+}
