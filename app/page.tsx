@@ -5,7 +5,6 @@ import Marquee from "@/components/Marquee";
 import FeaturedArticleBlock from "@/components/FeaturedArticleBlock";
 import EditorialBanner from "@/components/EditorialBanner";
 import FitpicCarousel from "@/components/FitpicCarousel";
-import TeamSection from "@/components/TeamSection";
 
 export const revalidate = 10;
 
@@ -81,11 +80,9 @@ export default async function Home() {
         <FitpicCarousel items={hp.fitPics} />
       )}
 
-      {hp?.teamMembers && hp.teamMembers.length > 0 && (
-        <TeamSection members={hp.teamMembers} />
-      )}
-
-      {/* Real footer to follow. */}
+      {/* THE TEAM section removed from the homepage (2026-11-27). The
+          TeamSection component and the Contentful teamMembers data are kept for
+          the About page. */}
     </>
   );
 }

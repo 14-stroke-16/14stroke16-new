@@ -4,17 +4,20 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// Nav items follow the homepage design (Production · About Us · Contact · Shop).
-// NOTE: destinations for Production and Shop are still TBD — Shop depends on the
-// ecommerce work (docs/ecommerce-plan.md); both point at "#" until confirmed.
-// About Us → /about (stub) and Contact → /contact already exist.
-// See docs/homepage-redesign-plan.md §7.7.
+// Nav: Magazine · About · Print, with a Cart button.
+// - Magazine → a landing page listing all the sub-categories (TBD, "#").
+// - About → /about (stub) already exists.
+// - Print → the shop page (ecommerce work, docs/ecommerce-plan.md; TBD, "#").
+// - Cart button → the cart (ecommerce; TBD, "#").
+// Production is commented out for now — not available yet.
+// Contact dropped from the top nav (still reachable from the footer).
 const NAV_LINKS = [
-  { href: "#", label: "Production" }, // TODO: destination TBD
-  { href: "/about", label: "About Us" },
-  { href: "/contact", label: "Contact" },
+  // { href: "#", label: "Production" }, // Not available right now.
+  { href: "#", label: "Magazine" }, // TODO: sub-categories landing page (TBD)
+  { href: "/about", label: "About" },
+  { href: "#", label: "Print" }, // TODO: the shop page (ecommerce, TBD)
 ];
-const SHOP = { href: "#", label: "Shop" }; // TODO: destination TBD (ecommerce)
+const CART = { href: "#", label: "Cart" }; // TODO: the cart (ecommerce, TBD)
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -45,10 +48,10 @@ export default function Header() {
           </Link>
         ))}
         <Link
-          href={SHOP.href}
+          href={CART.href}
           className="bg-black px-10 py-2.5 text-xs font-bold uppercase tracking-wide text-ivoryWhite transition-opacity hover:opacity-90"
         >
-          {SHOP.label}
+          {CART.label}
         </Link>
       </nav>
 
@@ -88,7 +91,7 @@ export default function Header() {
           &times;
         </button>
         <ul className="flex flex-col gap-5">
-          {[...NAV_LINKS, SHOP].map((link) => (
+          {[...NAV_LINKS, CART].map((link) => (
             <li key={link.label}>
               <Link
                 href={link.href}
