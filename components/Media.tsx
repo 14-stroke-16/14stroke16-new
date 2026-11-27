@@ -1,4 +1,5 @@
 import Image from "next/image";
+import BackgroundVideo from "@/components/BackgroundVideo";
 
 interface MediaProps {
   /** Resolved asset URL (already prefixed with https:). */
@@ -38,17 +39,12 @@ export default function Media({
   if (isVideo) {
     if (fill) {
       return (
-        <video
-          className={`absolute inset-0 h-full w-full object-cover ${className}`}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
+        <BackgroundVideo
+          src={src}
+          type={type}
           poster={poster}
-        >
-          <source src={src} type={type} />
-        </video>
+          className={className}
+        />
       );
     }
     return (
