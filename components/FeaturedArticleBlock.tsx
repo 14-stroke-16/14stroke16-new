@@ -36,6 +36,14 @@ export default function FeaturedArticleBlock({
   const imageOnLeft = index % 2 === 0;
   const dark = index % 2 === 0;
 
+  // Optional per-tile colours (hex) override the automatic dark/light
+  // alternation, per field. Handy once there are more than a few featured
+  // blocks and the alternation alone isn't enough.
+  const bgOverride = item.fields.backgroundColor;
+  const textOverride = item.fields.textColor;
+  const bgClass = bgOverride ? "" : dark ? "bg-black" : "bg-ivoryWhite";
+  const textClass = textOverride ? "" : dark ? "text-ivoryWhite" : "text-black";
+
   const image = (
     <div
       className={`relative min-h-[420px] w-full md:min-h-[680px] ${
@@ -58,9 +66,8 @@ export default function FeaturedArticleBlock({
     <div
       className={`flex w-full flex-col justify-center gap-6 px-6 py-14 ${
         slim ? "md:w-3/5 md:px-24" : "md:w-1/2 md:px-14"
-      } ${imageOnLeft ? "items-end text-right" : "items-start text-left"} ${
-        dark ? "bg-black text-ivoryWhite" : "bg-ivoryWhite text-black"
-      }`}
+      } ${imageOnLeft ? "items-end text-right" : "items-start text-left"} ${bgClass} ${textClass}`}
+      style={{ backgroundColor: bgOverride, color: textOverride }}
     >
       <h2 className="text-3xl font-bold uppercase leading-[0.95] tracking-tight md:text-5xl">
         {heading}

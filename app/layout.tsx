@@ -7,6 +7,7 @@ import "@/styles/globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WebVitals from "@/components/WebVitals";
+import { getSiteChrome } from "@/lib/contentful/siteChrome";
 
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID;
 // Only load GA when an ID is configured AND this is a production build.
@@ -54,17 +55,19 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.ico" },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const chrome = await getSiteChrome();
+
   return (
     <html lang="en">
       <body className={`${einaFont.variable} bg-ivoryWhite font-sans`}>
-        <Header />
+        <Header chrome={chrome} />
         {children}
-        <Footer />
+        <Footer chrome={chrome} />
 
         {/* Google Analytics (GA4) — production only, gated by NEXT_PUBLIC_GA_ID */}
         {gaEnabled && (

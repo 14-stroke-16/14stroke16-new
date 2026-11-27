@@ -136,6 +136,26 @@ export interface HomepageFields {
 }
 export type Homepage = Entry<HomepageFields>;
 
+/* ---- nav link + site chrome (content types: "navLink", "siteChrome") ---- */
+
+export interface NavLinkFields {
+  label: string;
+  href: string;
+}
+export type NavLink = Entry<NavLinkFields>;
+
+export interface SiteChromeFields {
+  internalTitle: string;
+  /** "Homepage only" (default) or "Whole site". */
+  scope?: string;
+  navLinks?: NavLink[];
+  footerLinks?: NavLink[];
+  /** Hex colour for the header + footer background / text. */
+  backgroundColor?: string;
+  textColor?: string;
+}
+export type SiteChrome = Entry<SiteChromeFields>;
+
 /* ---- fit pic (content type: "fitPic") ---- */
 
 export interface FitPicFields {
@@ -161,6 +181,9 @@ export interface FeaturedArticleFields {
   imageOverride?: ContentfulAsset;
   /** "Full bleed" (default) or "Contained" (smaller, padded, light bg). */
   imageStyle?: string;
+  /** Optional per-tile colours (hex); fall back to the dark/light alternation. */
+  backgroundColor?: string;
+  textColor?: string;
 }
 export type FeaturedArticle = Entry<FeaturedArticleFields>;
 

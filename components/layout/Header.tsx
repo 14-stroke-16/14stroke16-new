@@ -3,28 +3,42 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { SiteChrome } from "@/lib/contentful/types";
 
-// Nav: Magazine · About · Print, with a Cart button.
-// - Magazine → a landing page listing all the sub-categories (TBD, "#").
-// - About → /about (stub) already exists.
-// - Print → the shop page (ecommerce work, docs/ecommerce-plan.md; TBD, "#").
-// - Cart button → the cart (ecommerce; TBD, "#").
-// Production is commented out for now — not available yet.
-// Contact dropped from the top nav (still reachable from the footer).
-const NAV_LINKS = [
-  // { href: "#", label: "Production" }, // Not available right now.
-  { href: "#", label: "Magazine" }, // TODO: sub-categories landing page (TBD)
+// Nav + colours come from the Site Chrome entry in Contentful. They apply on
+// the homepage always, and site-wide when its Scope is "Whole site"; otherwise
+// these hardcoded defaults are used. Magazine/Print/Cart are "#" placeholders;
+// About → /about exists. The Cart button is a fixed element (ecommerce), not a
+// CMS link.
+const DEFAULT_NAV = [
+  { href: "#", label: "Magazine" },
   { href: "/about", label: "About" },
-  { href: "#", label: "Print" }, // TODO: the shop page (ecommerce, TBD)
+  { href: "#", label: "Print" },
 ];
-const CART = { href: "#", label: "Cart" }; // TODO: the cart (ecommerce, TBD)
+const CART = { href: "#", label: "Cart" };
 
-export default function Header() {
+export default function Header({ chrome }: { chrome?: SiteChrome | null }) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
+  const pathname = usePathname();
+
+  const applies = pathname === "/" || chrome?.fields?.scope === "Whole site";
+  const navLinks =
+    applies && chrome?.fields?.navLinks?.length
+      ? chrome.fields.navLinks.map((l) => ({
+          label: l.fields.label,
+          href: l.fields.href,
+        }))
+      : DEFAULT_NAV;
+  const bg = applies ? chrome?.fields?.backgroundColor : undefined;
+  const fg = applies ? chrome?.fields?.textColor : undefined;
 
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between bg-ivoryWhite px-4 py-4 md:px-8">
+    <header
+      className="sticky top-0 z-50 flex items-center justify-between bg-ivoryWhite px-4 py-4 text-black md:px-8"
+      style={{ backgroundColor: bg, color: fg }}
+    >
       <Link href="/" onClick={close} aria-label="14STROKE16 home">
         <Image
           src="/logo_svg.svg"
@@ -38,7 +52,7 @@ export default function Header() {
 
       {/* Desktop inline nav */}
       <nav className="hidden items-center gap-8 md:flex lg:gap-12">
-        {NAV_LINKS.map((link) => (
+        {navLinks.map((link) => (
           <Link
             key={link.label}
             href={link.href}
@@ -63,9 +77,9 @@ export default function Header() {
         onClick={() => setOpen((v) => !v)}
         className="flex flex-col gap-1.5 md:hidden"
       >
-        <span className="block h-0.5 w-6 bg-black" />
-        <span className="block h-0.5 w-6 bg-black" />
-        <span className="block h-0.5 w-6 bg-black" />
+        <span className="block h-0.5 w-6 bg-current" />
+        <span className="block h-0.5 w-6 bg-current" />
+        <span className="block h-0.5 w-6 bg-current" />
       </button>
 
       {open && (
@@ -78,7 +92,7 @@ export default function Header() {
 
       {/* Mobile slide-in menu */}
       <nav
-        className={`fixed right-0 top-0 z-50 h-full w-64 transform bg-ivoryWhite p-8 shadow-lg transition-transform duration-300 md:hidden ${
+        className={`fixed right-0 top-0 z-50 h-full w-64 transform bg-ivoryWhite p-8 text-black shadow-lg transition-transform duration-300 md:hidden ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -91,7 +105,7 @@ export default function Header() {
           &times;
         </button>
         <ul className="flex flex-col gap-5">
-          {[...NAV_LINKS, CART].map((link) => (
+          {[...navLinks, CART].map((link) => (
             <li key={link.label}>
               <Link
                 href={link.href}
