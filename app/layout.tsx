@@ -64,6 +64,12 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        {/* Warm up the connection to Contentful's image CDN so photos start
+            downloading sooner. */}
+        <link rel="preconnect" href="https://images.ctfassets.net" />
+        <link rel="dns-prefetch" href="https://images.ctfassets.net" />
+      </head>
       <body className={`${einaFont.variable} bg-ivoryWhite font-sans`}>
         <Header chrome={chrome} />
         {children}

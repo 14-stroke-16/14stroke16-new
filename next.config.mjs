@@ -2,18 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.ctfassets.net",
-        pathname: "**",
-      },
-      {
-        protocol: "https",
-        hostname: "downloads.ctfassets.net",
-        pathname: "**",
-      },
-    ],
+    // Serve Contentful images straight from their CDN (resize + WebP) via a
+    // custom loader, instead of the Next.js image optimizer.
+    loader: "custom",
+    loaderFile: "./lib/contentfulImageLoader.ts",
   },
 };
 
