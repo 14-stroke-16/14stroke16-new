@@ -5,6 +5,7 @@ import Marquee from "@/components/Marquee";
 import FeaturedArticleBlock from "@/components/FeaturedArticleBlock";
 import EditorialBanner from "@/components/EditorialBanner";
 import FitpicCarousel from "@/components/FitpicCarousel";
+import { getBannerItems, bannerSegments } from "@/lib/contentful/banner";
 
 export const revalidate = 10;
 
@@ -28,15 +29,42 @@ export default async function Home() {
     ? `/articles/${heroArticle.fields.slug}`
     : hp?.heroCtaLink;
 
-  // Top banner: custom message, else auto "© <year> 14STROKE16 MAGAZINE".
+  // Top banner. Priority: a custom message (if set) wins; otherwise show the
+  // latest pillar items (Covers / Features / Locked In / Fit Pic) by talent —
+  // up to 3 on desktop, 1 on mobile; falling back to the © line when there are
+  // none. bannerEnabled is the master on/off.
   const bannerOn = hp ? hp.bannerEnabled !== false : false;
-  const bannerText =
-    hp?.bannerCustomMessage?.trim() ||
-    `© ${new Date().getFullYear()} 14STROKE16 MAGAZINE`;
+  const bannerCustom = hp?.bannerCustomMessage?.trim();
+  const bannerFallback = `© ${new Date().getFullYear()} 14STROKE16 MAGAZINE`;
+
+  const bannerItems =
+    bannerOn && !bannerCustom ? await getBannerItems(3) : [];
+  // Each pillar is its own banner section. Desktop shows up to 3, mobile 1;
+  // custom message / © fallback are a single section.
+  const bannerDesktopItems = bannerCustom
+    ? [bannerCustom]
+    : bannerItems.length
+      ? bannerSegments(bannerItems)
+      : [bannerFallback];
+  const bannerMobileItems = bannerCustom
+    ? [bannerCustom]
+    : bannerItems.length
+      ? bannerSegments(bannerItems.slice(0, 1))
+      : [bannerFallback];
 
   return (
     <>
-      {bannerOn && <Marquee text={bannerText} />}
+      {bannerOn && (
+        <>
+          {/* Desktop: up to 3 pillar sections. Mobile: 1. */}
+          <div className="hidden md:block">
+            <Marquee items={bannerDesktopItems} />
+          </div>
+          <div className="md:hidden">
+            <Marquee items={bannerMobileItems} />
+          </div>
+        </>
+      )}
 
       {hp && heroHeadline && (
         <Hero

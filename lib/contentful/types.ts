@@ -61,6 +61,10 @@ export interface ArticleFields {
   thumbnail?: ContentfulAsset;
   thumbnailAltTag?: string;
   excerpt?: string;
+  /** Talent shown in the top banner (Covers pillar). */
+  talentName?: string;
+  /** Manual-only override for the banner's "latest" ordering. */
+  bannerOverride?: string;
 }
 export type Article = Entry<ArticleFields>;
 
@@ -140,6 +144,10 @@ export interface FitPicFields {
   image: ContentfulAsset;
   imageAltTag: string;
   excerpt: string;
+  /** Talent shown in the top banner (Fit Pic pillar). */
+  talentName?: string;
+  /** Manual-only override for the banner's "latest" ordering. */
+  bannerOverride?: string;
 }
 export type FitPic = Entry<FitPicFields>;
 
