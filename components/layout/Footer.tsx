@@ -52,7 +52,7 @@ export default function Footer({ chrome }: { chrome?: SiteChrome | null }) {
               </Link>
             ))}
           </nav>
-          <p className="opacity-60">
+          <p className="whitespace-nowrap text-[10px] opacity-60 sm:text-xs">
             &copy; {year} 14STROKE16 Magazine &mdash; All rights reserved
           </p>
         </div>
