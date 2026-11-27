@@ -27,7 +27,7 @@ export default function Hero({
     : null;
 
   return (
-    <section className="relative flex min-h-[calc(100dvh-88px)] w-full items-end overflow-hidden bg-black md:min-h-[calc(100dvh-102px)]">
+    <section className="relative flex min-h-[100dvh] w-full items-end overflow-hidden bg-black md:min-h-[calc(100dvh-102px)]">
       <Media
         src={src}
         type={image?.type}
