@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Article } from "@/lib/contentful/types";
+import { pillarPath } from "@/lib/contentful/pillars";
 
 export default function ArticleCard({ article }: { article: Article }) {
   const {
@@ -11,10 +12,12 @@ export default function ArticleCard({ article }: { article: Article }) {
     thumbnail,
     thumbnailAltTag,
   } = article.fields;
+  // Link by pillar so the same card works for Covers, Features and Locked In.
+  const href = `${pillarPath(article.sys?.contentType?.sys?.id)}/${slug}`;
 
   return (
     <div className="py-3">
-      <Link href={`/articles/${slug}`}>
+      <Link href={href}>
         {thumbnail && (
           <Image
             src={`https:${thumbnail.fields.file.url}`}

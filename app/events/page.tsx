@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getEvents } from "@/lib/contentful/events";
 import EventsCard from "@/components/cards/EventsCard";
+import BackToHome from "@/components/BackToHome";
 
 export const revalidate = 10;
 
@@ -14,6 +15,7 @@ export default async function EventsPage() {
 
   return (
     <div className="container mx-auto mt-10 px-3">
+      <BackToHome />
       <h1 className="py-6 text-2xl font-bold">EVENTS</h1>
       {events.length === 0 ? (
         <div className="h-screen py-6 text-center">

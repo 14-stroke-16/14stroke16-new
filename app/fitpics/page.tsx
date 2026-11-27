@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getFitPics } from "@/lib/contentful/fitpics";
 import FitpicCard from "@/components/FitpicCard";
+import BackToHome from "@/components/BackToHome";
 
 export const revalidate = 10;
 
@@ -14,6 +15,7 @@ export default async function FitPicsPage() {
 
   return (
     <div className="container mx-auto mt-10 px-3">
+      <BackToHome />
       <h1 className="py-6 text-2xl font-bold uppercase">Fit Pics</h1>
       {fitpics.length === 0 ? (
         <p className="opacity-60">No fit pics yet.</p>

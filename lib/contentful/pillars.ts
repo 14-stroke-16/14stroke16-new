@@ -1,8 +1,15 @@
-import { fetchEntry, fetchSlugs } from "./fetch";
+import { fetchEntries, fetchEntry, fetchSlugs } from "./fetch";
 import type { Article } from "./types";
 
 // Features and Locked In are pillar content types cloned from Article, so they
 // share the Article field shape. Minimal fetchers for their detail pages.
+
+/** All Features, newest first (by Published Date). */
+export const getFeatures = (preview = false) =>
+  fetchEntries<Article>(
+    { content_type: "feature", order: ["-fields.articlePublishedDate"] },
+    preview,
+  );
 
 export const getFeatureSlugs = () => fetchSlugs("feature");
 export const getFeatureBySlug = (slug: string, preview = false) =>
