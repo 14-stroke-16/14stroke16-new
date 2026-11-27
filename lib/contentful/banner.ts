@@ -26,6 +26,8 @@ export interface BannerItem {
   /** Uppercase display label shown in the banner. */
   label: string;
   talentName: string;
+  /** Link to the item's page, when it has one. */
+  href?: string;
   /** ms timestamp used for ordering. */
   date: number;
 }
@@ -34,19 +36,22 @@ const PILLARS: {
   contentType: string;
   pillar: Pillar;
   label: string;
+  /** Route prefix for the item's page (slug is appended). */
+  hrefBase: string;
   /** Delivery-API order used to fetch this type's freshest candidates. */
   order: string;
 }[] = [
-  { contentType: "article", pillar: "Covers", label: "COVER", order: "-fields.articlePublishedDate" },
-  { contentType: "feature", pillar: "Features", label: "FEATURES", order: "-fields.articlePublishedDate" },
-  { contentType: "lockedIn", pillar: "Locked In", label: "LOCKED IN", order: "-fields.articlePublishedDate" },
-  { contentType: "fitPic", pillar: "Fit Pic", label: "FITPIC", order: "-fields.articlePublishedDate" },
+  { contentType: "article", pillar: "Covers", label: "COVER", hrefBase: "/articles", order: "-fields.articlePublishedDate" },
+  { contentType: "feature", pillar: "Features", label: "FEATURES", hrefBase: "/features", order: "-fields.articlePublishedDate" },
+  { contentType: "lockedIn", pillar: "Locked In", label: "LOCKED IN", hrefBase: "/locked-in", order: "-fields.articlePublishedDate" },
+  { contentType: "fitPic", pillar: "Fit Pic", label: "FITPIC", hrefBase: "/fitpics", order: "-fields.articlePublishedDate" },
 ];
 
 interface PillarEntry {
   sys: { id: string; createdAt: string };
   fields: {
     talentName?: string;
+    slug?: string;
     bannerOverride?: string;
     articlePublishedDate?: string;
   };
@@ -78,6 +83,7 @@ export async function getBannerItems(
           pillar: p.pillar,
           label: p.label,
           talentName: e.fields.talentName as string,
+          href: e.fields.slug ? `${p.hrefBase}/${e.fields.slug}` : undefined,
           date: new Date(
             e.fields.bannerOverride ??
               e.fields.articlePublishedDate ??
@@ -93,7 +99,15 @@ export async function getBannerItems(
     .slice(0, limit);
 }
 
-/** Each item as its own banner segment, e.g. "FITPIC: JAY TAGLE". */
-export function bannerSegments(items: BannerItem[]): string[] {
-  return items.map((i) => `${i.label}: ${i.talentName}`);
+export interface BannerSegment {
+  text: string;
+  href?: string;
+}
+
+/** Each item as a banner segment (text + optional link), e.g. "FITPIC: JAY TAGLE". */
+export function bannerSegments(items: BannerItem[]): BannerSegment[] {
+  return items.map((i) => ({
+    text: `${i.label}: ${i.talentName}`,
+    href: i.href,
+  }));
 }

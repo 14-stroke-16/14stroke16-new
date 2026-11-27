@@ -42,15 +42,15 @@ export default async function Home() {
   // Each pillar is its own banner section. Desktop shows up to 3, mobile 1;
   // custom message / © fallback are a single section.
   const bannerDesktopItems = bannerCustom
-    ? [bannerCustom]
+    ? [{ text: bannerCustom }]
     : bannerItems.length
       ? bannerSegments(bannerItems)
-      : [bannerFallback];
+      : [{ text: bannerFallback }];
   const bannerMobileItems = bannerCustom
-    ? [bannerCustom]
+    ? [{ text: bannerCustom }]
     : bannerItems.length
       ? bannerSegments(bannerItems.slice(0, 1))
-      : [bannerFallback];
+      : [{ text: bannerFallback }];
 
   return (
     <>
