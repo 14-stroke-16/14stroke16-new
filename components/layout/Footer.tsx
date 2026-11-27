@@ -16,8 +16,9 @@ export default function Footer() {
 
   return (
     <footer className="bg-black text-ivoryWhite">
-      {/* Links + copyright, one line (wraps only on very narrow screens) */}
-      <div className="mx-auto max-w-[1200px] px-4 pb-10 pt-12 md:px-8">
+      {/* Links + copyright, one line spanning the full width (wraps only on
+          very narrow screens) */}
+      <div className="px-4 pb-10 pt-12 md:px-8">
         <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 text-xs font-medium uppercase tracking-wide">
           <nav className="flex flex-wrap gap-x-8 gap-y-2">
             {LINKS.map((l) => (
