@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 import { getHomepage } from "@/lib/contentful/homepage";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import FeaturedArticleBlock from "@/components/FeaturedArticleBlock";
 import EditorialBanner from "@/components/EditorialBanner";
 import FitpicCarousel from "@/components/FitpicCarousel";
+import PreviewBanner from "@/components/PreviewBanner";
 import { getBannerItems, bannerSegments } from "@/lib/contentful/banner";
 import { pillarPath } from "@/lib/contentful/pillars";
 
@@ -16,7 +18,11 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const homepage = await getHomepage();
+  // Draft mode (Contentful "Open preview" → /api/draft) lets editors preview the
+  // unpublished homepage. Reading draftMode() opts this route into dynamic
+  // rendering; outside preview it still revalidates on the interval above.
+  const { isEnabled } = await draftMode();
+  const homepage = await getHomepage(isEnabled);
 
   const hp = homepage?.fields;
   const heroArticle = hp?.heroArticle;
@@ -42,7 +48,7 @@ export default async function Home() {
   const bannerFallback = `© ${new Date().getFullYear()} 14STROKE16 MAGAZINE`;
 
   const bannerItems =
-    bannerOn && !bannerCustom ? await getBannerItems(3) : [];
+    bannerOn && !bannerCustom ? await getBannerItems(3, isEnabled) : [];
   // Each pillar is its own banner section. Desktop shows up to 3, mobile 1;
   // custom message / © fallback are a single section.
   const bannerDesktopItems = bannerCustom
@@ -58,6 +64,7 @@ export default async function Home() {
 
   return (
     <>
+      {isEnabled && <PreviewBanner />}
       {bannerOn && (
         <>
           {/* Desktop: up to 3 pillar sections. Mobile: 1. */}
