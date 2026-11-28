@@ -21,6 +21,8 @@ export default async function Home() {
   const hp = homepage?.fields;
   const heroArticle = hp?.heroArticle;
   // Headline source toggle: article title vs the fixed brand tagline (default).
+  // Either source can be empty (no tagline typed, or an article with no title),
+  // so this may be undefined — the hero then renders without a headline.
   const heroHeadline =
     hp?.heroHeadlineSource === "Article title" && heroArticle?.fields?.title
       ? heroArticle.fields.title
@@ -68,7 +70,7 @@ export default async function Home() {
         </>
       )}
 
-      {hp && heroHeadline && (
+      {hp && (heroHeadline || hp.heroBackground || heroCtaHref) && (
         <Hero
           image={
             hp.heroBackground

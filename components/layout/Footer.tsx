@@ -13,7 +13,7 @@ import type { SiteChrome } from "@/lib/contentful/types";
 const DEFAULT_LINKS = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
-  { label: "Legals", href: "/legal" },
+  { label: "Legal", href: "/legal" },
   { label: "Shipping", href: "/shipping" },
 ];
 
