@@ -138,7 +138,7 @@ export default async function CommunityArticlePage({
                 <div key={index} className="py-5">
                   <Image
                     src={`https:${section.fields.image.fields.file.url}`}
-                    alt={section.fields.altText}
+                    alt={section.fields.altText || ""}
                     width={dimensions?.width ?? 1000}
                     height={dimensions?.height ?? 700}
                     className="mx-auto"

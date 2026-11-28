@@ -2,7 +2,12 @@ import type { Document } from "@contentful/rich-text-types";
 
 /** Generic Contentful entry wrapper used across content types. */
 export interface Entry<TFields> {
-  sys: { id: string; createdAt: string };
+  sys: {
+    id: string;
+    createdAt: string;
+    /** Present on delivered entries; used to build pillar-aware links. */
+    contentType?: { sys: { id: string } };
+  };
   fields: TFields;
 }
 
@@ -13,6 +18,8 @@ export interface ContentfulAsset {
     description?: string;
     file: {
       url: string;
+      /** MIME type, e.g. "image/jpeg" or "video/mp4" — used to render video. */
+      contentType?: string;
       details?: { image?: { width: number; height: number } };
     };
   };
@@ -35,7 +42,18 @@ export interface QuoteBlock {
   fields: { quoteBlockText: string };
 }
 
-export type ContentSection = TextBlock | ImageBlock | QuoteBlock;
+export interface VideoBlock {
+  sys: { contentType: { sys: { id: "videoBlock" } } };
+  fields: {
+    /** YouTube/Vimeo URL (long-form video). */
+    videoUrl?: string;
+    /** Or an uploaded Contentful video asset. */
+    videoFile?: ContentfulAsset;
+    caption?: string;
+  };
+}
+
+export type ContentSection = TextBlock | ImageBlock | QuoteBlock | VideoBlock;
 
 export const isTextBlock = (s: ContentSection): s is TextBlock =>
   s.sys.contentType.sys.id === "textBlock";
@@ -43,6 +61,8 @@ export const isImageBlock = (s: ContentSection): s is ImageBlock =>
   s.sys.contentType.sys.id === "image";
 export const isQuoteBlock = (s: ContentSection): s is QuoteBlock =>
   s.sys.contentType.sys.id === "quoteBlock";
+export const isVideoBlock = (s: ContentSection): s is VideoBlock =>
+  s.sys.contentType.sys.id === "videoBlock";
 
 /* ---- article ---- */
 
@@ -61,6 +81,10 @@ export interface ArticleFields {
   thumbnail?: ContentfulAsset;
   thumbnailAltTag?: string;
   excerpt?: string;
+  /** Talent shown in the top banner (Covers pillar). */
+  talentName?: string;
+  /** Manual-only override for the banner's "latest" ordering. */
+  bannerOverride?: string;
 }
 export type Article = Entry<ArticleFields>;
 
@@ -104,3 +128,91 @@ export interface GalleryFields {
   googleDriveLink?: string;
 }
 export type GalleryItem = Entry<GalleryFields>;
+
+/* ---- homepage (singleton, content type: "homepage") ---- */
+
+export interface HomepageFields {
+  internalTitle: string;
+  bannerEnabled?: boolean;
+  bannerCustomMessage?: string;
+  /** The month/season's lead article — drives the hero's READ MORE link and,
+   *  when heroHeadlineSource is "Article title", the headline. */
+  heroArticle?: Article;
+  heroBackground?: ContentfulAsset;
+  heroHeadline: string;
+  /** "Brand tagline" (default) or "Article title" — toggles the headline source. */
+  heroHeadlineSource?: string;
+  heroIntro?: string;
+  heroCtaLabel?: string;
+  heroCtaLink?: string;
+  featuredArticles?: FeaturedArticle[];
+  editorialImage?: ContentfulAsset;
+  editorialLabel?: string;
+  editorialText?: string;
+  editorialCtaLabel?: string;
+  editorialCtaLink?: string;
+  fitPics?: FitPic[];
+  teamMembers?: TeamMember[];
+}
+export type Homepage = Entry<HomepageFields>;
+
+/* ---- nav link + site chrome (content types: "navLink", "siteChrome") ---- */
+
+export interface NavLinkFields {
+  label: string;
+  href: string;
+}
+export type NavLink = Entry<NavLinkFields>;
+
+export interface SiteChromeFields {
+  internalTitle: string;
+  /** "Homepage only" (default) or "Whole site". */
+  scope?: string;
+  navLinks?: NavLink[];
+  footerLinks?: NavLink[];
+  /** Hex colour for the header + footer background / text. */
+  backgroundColor?: string;
+  textColor?: string;
+}
+export type SiteChrome = Entry<SiteChromeFields>;
+
+/* ---- fit pic (content type: "fitPic") ---- */
+
+export interface FitPicFields {
+  title: string;
+  slug: string;
+  image: ContentfulAsset;
+  imageAltTag: string;
+  excerpt: string;
+  /** Talent shown in the top banner (Fit Pic pillar). */
+  talentName?: string;
+  /** Manual-only override for the banner's "latest" ordering. */
+  bannerOverride?: string;
+}
+export type FitPic = Entry<FitPicFields>;
+
+/* ---- featured article block (content type: "featuredArticle") ---- */
+
+export interface FeaturedArticleFields {
+  internalTitle: string;
+  article: Article;
+  headingOverride?: string;
+  blurbOverride?: string;
+  imageOverride?: ContentfulAsset;
+  /** "Full bleed" (default) or "Contained" (smaller, padded, light bg). */
+  imageStyle?: string;
+  /** Optional per-tile colours (hex); fall back to the dark/light alternation. */
+  backgroundColor?: string;
+  textColor?: string;
+}
+export type FeaturedArticle = Entry<FeaturedArticleFields>;
+
+/* ---- team member (content type: "teamMember") ---- */
+
+export interface TeamMemberFields {
+  name: string;
+  role: string;
+  photo: ContentfulAsset;
+  photoAltTag: string;
+}
+export type TeamMember = Entry<TeamMemberFields>;

@@ -7,8 +7,14 @@ import "@/styles/globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WebVitals from "@/components/WebVitals";
+import { getSiteChrome } from "@/lib/contentful/siteChrome";
 
-const GA_MEASUREMENT_ID = "G-6G2T8LT049";
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID;
+// Only load GA when an ID is configured AND this is a production build.
+// This keeps localhost dev out of analytics; staging is separated by giving
+// the staging deployment a different (or empty) NEXT_PUBLIC_GA_ID.
+const gaEnabled =
+  process.env.NODE_ENV === "production" && Boolean(GA_MEASUREMENT_ID);
 
 const einaFont = localFont({
   src: [
@@ -49,33 +55,45 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.ico" },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const chrome = await getSiteChrome();
+
   return (
     <html lang="en">
+      <head>
+        {/* Warm up the connection to Contentful's image CDN so photos start
+            downloading sooner. */}
+        <link rel="preconnect" href="https://images.ctfassets.net" />
+        <link rel="dns-prefetch" href="https://images.ctfassets.net" />
+      </head>
       <body className={`${einaFont.variable} bg-ivoryWhite font-sans`}>
-        <Header />
+        <Header chrome={chrome} />
         {children}
-        <Footer />
+        <Footer chrome={chrome} />
 
-        {/* Google Analytics (GA4) */}
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_MEASUREMENT_ID}');
-          `}
-        </Script>
+        {/* Google Analytics (GA4) — production only, gated by NEXT_PUBLIC_GA_ID */}
+        {gaEnabled && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_MEASUREMENT_ID}');
+              `}
+            </Script>
+            <WebVitals />
+          </>
+        )}
 
-        <WebVitals />
         <Analytics />
         <SpeedInsights />
       </body>

@@ -6,6 +6,48 @@
   @apply mt-10 grid grid-cols-1 gap-y-5 overflow-x-hidden md:grid-cols-2 md:gap-5 md:px-6 lg:gap-10;
 }
 
+/* Full-screen homepage hero height.
+   On mobile, use 100lvh — the *largest* (toolbar-hidden) viewport, and a static
+   value. Because it never changes when iOS shows/hides its toolbar, the hero can
+   never under-fill: when the toolbar retracts there's no resize or repaint to lag
+   behind, so the next section can't peek through at the bottom. (100dvh and a
+   JS-tracked visualViewport both resize at that exact moment and visibly lag.)
+   100vh is the fallback for browsers without lvh.
+   On desktop (md+) there are no retracting toolbars; subtract the 102px sticky
+   header so the hero fills the space beneath it. */
+.hero-min-h {
+  min-height: 100vh;
+  min-height: 100lvh;
+}
+@media (min-width: 768px) {
+  .hero-min-h {
+    min-height: calc(100vh - 102px);
+    min-height: calc(100lvh - 102px);
+  }
+}
+
+/* Bottom spacing for the hero's text block on mobile.
+   The hero fills 100lvh (toolbar-hidden height), so its bottom edge — where the
+   bottom-aligned text sits — falls *behind* the iOS toolbar when it's showing.
+   Anchoring to the small (visible) viewport instead keeps the text clear of the
+   controls on any device: calc(100lvh - 60svh) places the text's baseline ~70%
+   down the visible viewport (accounting for the header/marquee above the hero),
+   whatever the toolbar height. 40vh is the fallback for browsers without
+   svh/lvh. Desktop uses a plain 13vh. */
+.hero-content-pb {
+  padding-bottom: 40vh;
+}
+@supports (height: 100svh) {
+  .hero-content-pb {
+    padding-bottom: calc(100lvh - 60svh);
+  }
+}
+@media (min-width: 768px) {
+  .hero-content-pb {
+    padding-bottom: 13vh;
+  }
+}
+
 p {
   white-space: pre-wrap;
 }
@@ -16,4 +58,12 @@ p {
 
 .align-bottom {
   align-items: flex-end;
+}
+
+/* Hide the native scrollbar — the FITPIC carousel shows its own progress bar. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

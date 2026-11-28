@@ -10,6 +10,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.9.4",
     "@contentful/rich-text-react-renderer": "^16.2.2",
     "@contentful/rich-text-types": "^16.8.0",
     "@vercel/analytics": "^2.0.1",

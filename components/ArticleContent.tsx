@@ -1,0 +1,152 @@
+import Image from "next/image";
+import Link from "next/link";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import {
+  isTextBlock,
+  isImageBlock,
+  isQuoteBlock,
+  isVideoBlock,
+  type Article,
+} from "@/lib/contentful/types";
+import Media from "@/components/Media";
+import VideoEmbed from "@/components/VideoEmbed";
+
+function AuthorTag({
+  author,
+  plugSocket,
+}: {
+  author?: string;
+  plugSocket?: string;
+}) {
+  if (!author) return null;
+  return plugSocket ? (
+    <p className="cursor-pointer text-xs text-black">
+      <Link href={plugSocket} target="_blank">
+        {author}
+      </Link>
+    </p>
+  ) : (
+    <p className="text-xs text-black">{author}</p>
+  );
+}
+
+// The full article body — title, featured image, intro, the blogSections body
+// (text / image / quote blocks) and credits. Shared by Covers (article),
+// Features and Locked In, which all share the Article field shape.
+export default function ArticleContent({ article }: { article: Article }) {
+  const {
+    title,
+    readTime,
+    author,
+    plugSocket,
+    featuredImage,
+    featuredImageAltTag,
+    credits,
+    introductionText,
+    blogSections,
+  } = article.fields;
+
+  return (
+    <div className="mx-auto my-10 px-5 md:max-w-[1200px] md:px-0">
+      <div className="grid-layout">
+        <h3 className="mb-4 text-left text-4xl font-bold uppercase md:mt-0 xl:hidden xl:text-6xl">
+          {title}
+        </h3>
+        <div className="flex justify-between align-bottom xl:hidden">
+          <AuthorTag author={author} plugSocket={plugSocket} />
+          {readTime != null && (
+            <p className="text-xs text-black">{readTime} mins</p>
+          )}
+        </div>
+        {featuredImage && (
+          <Media
+            src={`https:${featuredImage.fields.file.url}`}
+            type={featuredImage.fields.file.contentType}
+            width={600}
+            height={600}
+            alt={featuredImageAltTag ?? title}
+          />
+        )}
+        <div>
+          <h3 className="mb-4 hidden text-center text-4xl font-bold uppercase md:mt-0 xl:block xl:text-6xl">
+            {title}
+          </h3>
+          <div className="text-body mt-10 whitespace-pre-wrap text-base leading-relaxed xl:text-xl">
+            {introductionText}
+          </div>
+          <div className="mt-10 hidden justify-between align-bottom xl:flex">
+            <AuthorTag author={author} plugSocket={plugSocket} />
+            {readTime != null && (
+              <p className="text-xs text-black">{readTime} mins</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="rich-text mt-10 grid grid-cols-1 overflow-x-hidden text-justify md:gap-5 md:px-6 lg:gap-10">
+        {blogSections?.map((section, index) => {
+          if (isTextBlock(section)) {
+            return (
+              <div
+                key={index}
+                className="text-body mt-5 whitespace-pre-wrap text-base leading-relaxed xl:text-xl"
+              >
+                {section.fields.textBlockText}
+              </div>
+            );
+          }
+          if (isImageBlock(section) && section.fields.image.fields.file) {
+            const dimensions = section.fields.image.fields.file.details?.image;
+            return (
+              <div key={index} className="py-5">
+                <Image
+                  src={`https:${section.fields.image.fields.file.url}`}
+                  alt={section.fields.altText || ""}
+                  width={dimensions?.width ?? 1000}
+                  height={dimensions?.height ?? 700}
+                  className="mx-auto"
+                />
+              </div>
+            );
+          }
+          if (isQuoteBlock(section)) {
+            return (
+              <div
+                key={index}
+                className="my-5 px-3 py-5 text-center text-3xl font-bold md:py-5"
+              >
+                {section.fields.quoteBlockText}
+              </div>
+            );
+          }
+          if (isVideoBlock(section)) {
+            const { videoUrl, videoFile, caption } = section.fields;
+            return (
+              <div key={index} className="py-5">
+                {videoUrl ? (
+                  <VideoEmbed url={videoUrl} title={caption} />
+                ) : videoFile ? (
+                  <Media
+                    src={`https:${videoFile.fields.file.url}`}
+                    type={videoFile.fields.file.contentType}
+                    className="w-full"
+                  />
+                ) : null}
+                {caption && (
+                  <p className="mt-2 text-center text-sm opacity-60">{caption}</p>
+                )}
+              </div>
+            );
+          }
+          return null;
+        })}
+      </div>
+
+      {credits && (
+        <div className="mt-10 pt-5 text-center text-sm text-gray-300">
+          {documentToReactComponents(credits)}
+        </div>
+      )}
+    </div>
+  );
+}

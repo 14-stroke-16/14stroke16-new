@@ -55,7 +55,7 @@ export default async function GalleryItemPage({
                 <div key={index} className="py-1">
                   <Image
                     src={`https:${section.fields.image.fields.file.url}`}
-                    alt={section.fields.altText}
+                    alt={section.fields.altText || ""}
                     width={dimensions?.width ?? 800}
                     height={dimensions?.height ?? 800}
                     className="mx-auto"

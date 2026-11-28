@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BackToHome from "@/components/BackToHome";
 
 export const metadata: Metadata = {
   title: "Get Involved",
@@ -6,5 +7,10 @@ export const metadata: Metadata = {
 };
 
 export default function GetInvolvedPage() {
-  return <div className="container mx-auto px-3 py-20">get-involved</div>;
+  return (
+    <div className="container mx-auto px-3 py-20">
+      <BackToHome />
+      <p className="mt-6">get-involved</p>
+    </div>
+  );
 }
