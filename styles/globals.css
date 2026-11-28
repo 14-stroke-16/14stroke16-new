@@ -26,6 +26,28 @@
   }
 }
 
+/* Bottom spacing for the hero's text block on mobile.
+   The hero fills 100lvh (toolbar-hidden height), so its bottom edge — where the
+   bottom-aligned text sits — falls *behind* the iOS toolbar when it's showing.
+   Anchoring to the small (visible) viewport instead keeps the text clear of the
+   controls on any device: calc(100lvh - 60svh) places the text's baseline ~70%
+   down the visible viewport (accounting for the header/marquee above the hero),
+   whatever the toolbar height. 40vh is the fallback for browsers without
+   svh/lvh. Desktop uses a plain 13vh. */
+.hero-content-pb {
+  padding-bottom: 40vh;
+}
+@supports (height: 100svh) {
+  .hero-content-pb {
+    padding-bottom: calc(100lvh - 60svh);
+  }
+}
+@media (min-width: 768px) {
+  .hero-content-pb {
+    padding-bottom: 13vh;
+  }
+}
+
 p {
   white-space: pre-wrap;
 }
