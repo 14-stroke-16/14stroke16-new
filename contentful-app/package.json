@@ -1,0 +1,29 @@
+{
+  "name": "conditional-field-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Contentful App Framework field editor that greys out (or hides) a text field until another field on the same entry has a chosen value.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "upload": "contentful-app-scripts upload --bundle-dir ./dist"
+  },
+  "dependencies": {
+    "@contentful/app-sdk": "^5.2.0",
+    "@contentful/f36-components": "^6.34.0",
+    "@contentful/f36-tokens": "^6.3.1",
+    "@contentful/react-apps-toolkit": "^3.0.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@contentful/app-scripts": "^2.4.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.0"
+  }
+}
