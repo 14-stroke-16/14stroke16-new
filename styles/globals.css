@@ -6,6 +6,26 @@
   @apply mt-10 grid grid-cols-1 gap-y-5 overflow-x-hidden md:grid-cols-2 md:gap-5 md:px-6 lg:gap-10;
 }
 
+/* Full-screen homepage hero height.
+   On mobile, use 100lvh — the *largest* (toolbar-hidden) viewport, and a static
+   value. Because it never changes when iOS shows/hides its toolbar, the hero can
+   never under-fill: when the toolbar retracts there's no resize or repaint to lag
+   behind, so the next section can't peek through at the bottom. (100dvh and a
+   JS-tracked visualViewport both resize at that exact moment and visibly lag.)
+   100vh is the fallback for browsers without lvh.
+   On desktop (md+) there are no retracting toolbars; subtract the 102px sticky
+   header so the hero fills the space beneath it. */
+.hero-min-h {
+  min-height: 100vh;
+  min-height: 100lvh;
+}
+@media (min-width: 768px) {
+  .hero-min-h {
+    min-height: calc(100vh - 102px);
+    min-height: calc(100lvh - 102px);
+  }
+}
+
 p {
   white-space: pre-wrap;
 }
